@@ -1,0 +1,156 @@
+Size: 100
+Sequential quicksort took: 0.000010 sec.
+Parallel quicksort took: 0.113786 sec.
+Built-in quicksort took: 0.000016 sec.
+Size: 1000
+Sequential quicksort took: 0.000134 sec.
+Parallel quicksort took: 0.514190 sec.
+Built-in quicksort took: 0.000195 sec.
+Size: 10000
+Sequential quicksort took: 0.001520 sec.
+Parallel quicksort took: 12.616005 sec.
+Built-in quicksort took: 0.000742 sec.
+Size: 100000
+Sequential quicksort took: 0.024733 sec.
+Parallel quicksort took: 25.529079 sec.
+Built-in quicksort took: 0.017881 sec.
+Size: 1000000
+Sequential quicksort took: 0.237320 sec.
+Parallel quicksort took: 22.673121 sec.
+Built-in quicksort took: 0.217997 sec.
+Size: 2500000
+Sequential quicksort took: 0.596410 sec.
+Parallel quicksort took: 26.510044 sec.
+Built-in quicksort took: 0.588320 sec.
+Size: 5000000
+Sequential quicksort took: 1.253158 sec.
+Parallel quicksort took: 25.138653 sec.
+Built-in quicksort took: 1.217363 sec.
+Size: 100
+Sequential quicksort took: 0.000010 sec.
+Parallel quicksort took: 0.112318 sec.
+Built-in quicksort took: 0.000015 sec.
+Size: 1000
+Sequential quicksort took: 0.000118 sec.
+Parallel quicksort took: 0.589454 sec.
+Built-in quicksort took: 0.000181 sec.
+Size: 10000
+Sequential quicksort took: 0.001522 sec.
+Parallel quicksort took: 7.581589 sec.
+Built-in quicksort took: 0.001582 sec.
+Size: 100000
+Sequential quicksort took: 0.022309 sec.
+Parallel quicksort took: 19.686940 sec.
+Built-in quicksort took: 0.017745 sec.
+Size: 1000000
+Sequential quicksort took: 0.245620 sec.
+Parallel quicksort took: 21.243507 sec.
+Built-in quicksort took: 0.219360 sec.
+Size: 2500000
+Sequential quicksort took: 0.638844 sec.
+Parallel quicksort took: 22.630938 sec.
+Built-in quicksort took: 0.586240 sec.
+Size: 5000000
+Sequential quicksort took: 1.276755 sec.
+ERROR; return code from pthread_create() is 11
+Size: 100
+Sequential quicksort took: 0.000010 sec.
+Parallel quicksort took: 0.088002 sec.
+Built-in quicksort took: 0.000014 sec.
+Size: 1000
+Sequential quicksort took: 0.000118 sec.
+Parallel quicksort took: 0.431303 sec.
+Built-in quicksort took: 0.000181 sec.
+Size: 10000
+Sequential quicksort took: 0.001647 sec.
+Parallel quicksort took: 21.039095 sec.
+Built-in quicksort took: 0.001375 sec.
+Size: 100000
+Sequential quicksort took: 0.021299 sec.
+Parallel quicksort took: 19.443614 sec.
+Built-in quicksort took: 0.018000 sec.
+Size: 1000000
+Sequential quicksort took: 0.238216 sec.
+Parallel quicksort took: 26.537061 sec.
+Built-in quicksort took: 0.217612 sec.
+Size: 2500000
+Sequential quicksort took: 0.603270 sec.
+Parallel quicksort took: 21.155365 sec.
+Built-in quicksort took: 0.584052 sec.
+Size: 5000000
+Sequential quicksort took: 1.263229 sec.
+Parallel quicksort took: 21.983482 sec.
+Built-in quicksort took: 1.219912 sec.
+Size: 100
+Sequential quicksort took: 0.000009 sec.
+Parallel quicksort took: 0.071857 sec.
+Built-in quicksort took: 0.000015 sec.
+Size: 1000
+Sequential quicksort took: 0.000121 sec.
+Parallel quicksort took: 0.638593 sec.
+Built-in quicksort took: 0.000194 sec.
+Size: 10000
+Sequential quicksort took: 0.001519 sec.
+Parallel quicksort took: 19.817252 sec.
+Built-in quicksort took: 0.001508 sec.
+Size: 100000
+Sequential quicksort took: 0.025108 sec.
+Parallel quicksort took: 21.648731 sec.
+Built-in quicksort took: 0.017327 sec.
+Size: 1000000
+Sequential quicksort took: 0.236809 sec.
+Parallel quicksort took: 19.908093 sec.
+Built-in quicksort took: 0.216329 sec.
+Size: 2500000
+Sequential quicksort took: 0.618959 sec.
+Parallel quicksort took: 25.318268 sec.
+Built-in quicksort took: 0.578712 sec.
+Size: 5000000
+Sequential quicksort took: 1.263032 sec.
+Parallel quicksort took: 19.314801 sec.
+Built-in quicksort took: 1.220476 sec.
+Size: 100
+Sequential quicksort took: 0.000010 sec.
+Parallel quicksort took: 0.111771 sec.
+Built-in quicksort took: 0.000014 sec.
+Size: 1000
+Sequential quicksort took: 0.000115 sec.
+Parallel quicksort took: 6.009943 sec.
+Built-in quicksort took: 0.000188 sec.
+Size: 10000
+Sequential quicksort took: 0.001485 sec.
+Parallel quicksort took: 19.394440 sec.
+Built-in quicksort took: 0.001416 sec.
+Size: 100000
+Sequential quicksort took: 0.022382 sec.
+Parallel quicksort took: 24.566094 sec.
+Built-in quicksort took: 0.017628 sec.
+Size: 1000000
+Sequential quicksort took: 0.233945 sec.
+Parallel quicksort took: 20.172533 sec.
+Built-in quicksort took: 0.216418 sec.
+Size: 2500000
+Sequential quicksort took: 0.603948 sec.
+Parallel quicksort took: 23.110648 sec.
+Built-in quicksort took: 0.588809 sec.
+Size: 5000000
+Sequential quicksort took: 1.286533 sec.
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
+ERROR; return code from pthread_create() is 11
