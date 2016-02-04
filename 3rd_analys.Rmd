@@ -1,0 +1,28 @@
+---
+title: "Troisième analyse"
+author: "Florian POPEK"
+date: "4 février 2016"
+output: html_document
+---
+
+```{r, echo=FALSE}
+draw <- function(df, title) 
+{
+  df_sum = ddply(df, c("Size", "Type"), summarize, num = length(Time), Mean = mean(Time), sd = sd(Time), se = 1.96*sd/sqrt(num));
+
+  plot = ggplot(df_sum, aes(x = Size, y = Mean, color=Type)) + geom_point() + geom_errorbar(aes(ymin = Mean-se, ymax = Mean+se)) + ggtitle(title);
+  
+  print(plot);
+}
+```
+
+```{r, echo=FALSE}
+library(stringr);
+library(plyr);
+library(ggplot2);
+
+
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_4v3.csv"), "50 times Thread Level 4");
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_4v4.csv"), "50 times Thread Level 4");
+
+```
