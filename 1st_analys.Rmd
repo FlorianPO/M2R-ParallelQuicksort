@@ -1,0 +1,73 @@
+---
+title: "Première analyse"
+author: "Florian POPEK"
+date: "04 Février 2016"
+output: html_document
+---
+
+On fait le jeu de test suivant:
+
+- on lance le programme avec une taille de tableau valant successivement {100, 1000, 10000, 100000, 1000000, 2500000, 5000000} octets
+
+- on répète cette opération 30 fois pour des valeurs de Thread Level valant {2, 3, 4, 6, 8, 16}
+
+Visualisons les données recueillies (les intervalles de confiance à 95% sont représentés):
+
+```{r, echo=FALSE}
+draw <- function(df, title) 
+{
+  df_sum = ddply(df, c("Size", "Type"), summarize, num = length(Time), Mean = mean(Time), sd = sd(Time), se = 1.96*sd/sqrt(num));
+
+  plot = ggplot(df_sum, aes(x = Size, y = Mean, color=Type)) + geom_point() + geom_errorbar(aes(ymin = Mean-se, ymax = Mean+se)) + scale_x_log10(
+   breaks = scales::trans_breaks("log10", function(x) 10^x),
+   labels = scales::trans_format("log10", scales::math_format(10^.x))
+  ) + ggtitle(title);
+  
+  print(plot);
+}
+```
+
+```{r, echo=FALSE}
+library(stringr);
+library(plyr);
+library(ggplot2);
+
+thread_c = c(2, 3, 4, 6, 8, 10, 16)
+for (i in 1:length(thread_c))
+{
+  draw(read.csv(str_c(str_c("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_", toString(thread_c[i])), ".csv"))
+       , str_c("Thread Level ", toString(thread_c[i])));
+}
+
+```
+
+Le graphe Thread Level 4 semble ne pas être cohérent pour un tableau de 5,000,000 octets (si l'on regarde pour Thread level 6), on refait une série de test:
+
+```{r, echo=FALSE}
+library(stringr);
+library(plyr);
+library(ggplot2);
+
+
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_4v2.csv"), "Thread Level 4v2");
+
+```
+
+Pourtant... On refait pour Thread Level 6:
+
+```{r, echo=FALSE}
+library(stringr);
+library(plyr);
+library(ggplot2);
+
+
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_6v2.csv"), "Thread Level 6v2");
+
+```
+
+C'est plus cohérent. On remarque que l'algorithme parallèle est plus lent à partir de Tread Level 8, pour toutes les tailles de tableaux.
+Thread Level 3 semble être la meilleure option ici.
+
+L'algorithme parallèle semble être meilleur pour des tableaux de taille environ égale à 1,000,000.
+
+On refera un jeu de test plus fin autour de cette valeur.
