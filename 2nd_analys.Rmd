@@ -1,0 +1,41 @@
+---
+title: "Deuxième analyse"
+author: "Florian POPEK"
+date: "4 février 2016"
+output: html_document
+---
+
+```{r, echo=FALSE}
+draw <- function(df, title) 
+{
+  df_sum = ddply(df, c("Size", "Type"), summarize, num = length(Time), Mean = mean(Time), sd = sd(Time), se = 1.96*sd/sqrt(num));
+
+  plot = ggplot(df_sum, aes(x = Size, y = Mean, color=Type)) + geom_point() + geom_errorbar(aes(ymin = Mean-se, ymax = Mean+se)) + ggtitle(title);
+  
+  print(plot);
+}
+```
+
+```{r, echo=FALSE}
+library(stringr);
+library(plyr);
+library(ggplot2);
+
+
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_3v2.csv"), "30 times Thread Level 3");
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_3v3.csv"), "50 times Thread Level 3");
+
+```
+
+On obtient de bons intervalles en exécutant 50 fois le programme. On va affiner notre recherche pour des taille de tableau autour de 100,000:
+
+```{r, echo=FALSE}
+library(stringr);
+library(plyr);
+library(ggplot2);
+
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_3v4.csv"), "50 times Thread Level 3");
+
+```
+
+L'algorithme parallèle devient meilleur que l'algorithme séquentiel à partir de tableaux de taille 100,000. Il devient également meilleur que l'algorithme de la librairie C pour des tailles supérieures à 160,000.
