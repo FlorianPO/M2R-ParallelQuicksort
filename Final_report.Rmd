@@ -1,0 +1,187 @@
+---
+title: "Rapport final"
+author: "Florian POPEK"
+date: "25 février 2016"
+output: html_document
+---
+
+# Environnement
+
+Toutes les expériences ont été effectuées sur une machine virtuelle:
+
+* VM: Oracle VirtualBox, Ubuntu 14.04 LTS
+* Hote: Windows 8.1
+* Processeur: Intel i7 4710HQ 2.50GHz, 4 coeurs dédiés
+* Ram: 4 GB
+
+Conditions:
+
+* Sur secteur
+* En limitant au maximum l'éxecution d'autres programmes
+
+# Compte rendu des expériences précédentes
+
+Les précédentes expériences (**1st**, **2nd** et **3rd_analysis**) avaient pour but de déceller la taille de tableau charnière, au delà de laquelle le tri parallèle devient intéressant. Pour **THREAD_LEVEL=3**:
+
+```{r, echo=FALSE}
+draw <- function(df, title) 
+{
+  df_sum = ddply(df, c("Size", "Type"), summarize, num = length(Time), Mean = mean(Time), sd = sd(Time), se = 1.96*sd/sqrt(num));
+
+  plot = ggplot(df_sum, aes(x = Size, y = Mean, color=Type)) + geom_point(alpha=.75) + ggtitle(title) + geom_smooth(method="lm", aes(fill=Type));
+  
+  print(plot);
+}
+```
+
+```{r, echo=FALSE}
+library(stringr);
+library(plyr);
+library(ggplot2);
+
+# perl scripts/csv_quicksort_extractor.pl < data/Flo-VirtualBox_2016-02-25/T_5.txt > data/Flo-VirtualBox_2016-02-25/R_5.csv
+
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-03/R_3v4.csv"), "50 times Thread Level 3");
+```
+
+L'algorithme parallèle devient plus intéressant que l'algorithme séquentiel pour des tailles supérieures à 75,000 (et plus intéressant que l'algorithme de la librairie C pour des tailles supérieures à 200,000).
+
+L'objectif maintenant est d'effectuer à nouveau ce genre de test, pour des THREAD_LEVEL variés afin d'en déduire une tendance. Les regressions linéaires étant acquises en R, le plan d'expérience sera différent que précédemment, pour ne pas dire allégé.
+
+# THREAD_LEVEL=2
+
+On lance l'algorithme avec des tailles de tableau variant de 20,000 à 400,000 par pas de 20,000:
+
+```{txt, echo=TRUE}
+OUTPUT_DIRECTORY=data/`hostname`_`date +%F`
+mkdir -p $OUTPUT_DIRECTORY
+OUTPUT_FILE=$OUTPUT_DIRECTORY/measurements_`date +%R`.txt
+
+touch $OUTPUT_FILE
+for rep in `seq 1 10`; do
+	echo "Seq = $rep"
+    for i in {20000..400000..20000}; do
+    	echo "i = $i"
+        echo "Size: $i" >> $OUTPUT_FILE;
+        ./src/parallelQuicksort $i >> $OUTPUT_FILE;
+    done ;
+done
+```
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_2.csv"), "10 times Thread Level 2");
+```
+
+On va préciser pour des tailles variant de 10000 à 250000 par pas de 10000:
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_2v2.csv"), "10 times Thread Level 2v2");
+```
+
+L'algorithme parallèle devient plus intéressant que l'algorithme séquentiel pour des tailles supérieures à 75,000 (et plus intéressant que l'algorithme de la librairie C pour des tailles supérieures à 125,000).
+
+# THREAD_LEVEL=4
+
+**3rd_analysis** avait pour but de préciser le comportement de l'algorithme pour THREAD_LEVEL=4, malheureusement sans régression linéaire, c'était difficile.
+
+On lance l'algorithme avec des tailles de tableau variant de 100,000 à 1,200,000 par pas de 50,000 (motivé par les résultats de **3rd_analysis**):
+
+```{txt, echo=TRUE}
+OUTPUT_DIRECTORY=data/`hostname`_`date +%F`
+mkdir -p $OUTPUT_DIRECTORY
+OUTPUT_FILE=$OUTPUT_DIRECTORY/measurements_`date +%R`.txt
+
+touch $OUTPUT_FILE
+for rep in `seq 1 10`; do
+	echo "Seq = $rep"
+    for i in {100000..1200000..50000}; do
+    	echo "i = $i"
+        echo "Size: $i" >> $OUTPUT_FILE;
+        ./src/parallelQuicksort $i >> $OUTPUT_FILE;
+    done ;
+done
+```
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_4.csv"), "10 times Thread Level 4");
+```
+
+On va préciser (les anciens résultats semblent encore plus foireux que je ne pensais) pour des tailles variant de 25,000 à 600,000 par pas de 25,000:
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_4v2.csv"), "10 times Thread Level 4v2");
+```
+
+L'algorithme parallèle devient plus intéressant que l'algorithme séquentiel pour des tailles supérieures à 250,000 (et plus intéressant que l'algorithme de la librairie C pour des tailles supérieures à 350,000).
+
+Par ailleurs ce plan d'expérience est très satisfaisant.
+
+# Compte rendu prématuré
+
+Si on observe la taille charnière entre l'algorithme parallèle et celui de la librairie C, on remarque que l'algorithme parallèle nécessite des tableaux de plus en plus grand au fur et à mesure que THREAD_LEVEL augmente:
+
+* THREAD_LEVEL=2: _ _ _ 125,000
+* THREAD_LEVEL=3: _ _ _ 200,000
+* THREAD_LEVEL=4: _ _ _ 350,000
+
+L'explication est évidente (plus de contexte à créer -> nécessite plus de calcul pour s'y retrouver), mais ce n'est pas celà qui nous intéresse tout de suite, mais plus la tendance de cette taille en fonction du THREAD_LEVEL.
+
+Il est clair que ce n'est pas linéaire, **1st_analysis** le montre, même grossièrement.
+
+Entre THREAD_LEVEL=2 et THREAD_LEVEL=3, il y a eut une augmentation de la taille du tableau de 75,000. Entre THREAD_LEVEL=3 et THREAD_LEVEL=4 une augmentation de 150,000 (ça a doublé). On peut donc espérer une taille proche de 650,000 pour THREAD_LEVEL=5, mais ça reste une suposition. Cela va tout de même guider notre prochain plan d'expérience.
+
+# THREAD_LEVEL=5
+
+On lance donc l'algorithme avec des tailles de tableau variant de 200,000 à 700,000 par pas de 25,000:
+
+```{txt, echo=TRUE}
+OUTPUT_DIRECTORY=data/`hostname`_`date +%F`
+mkdir -p $OUTPUT_DIRECTORY
+OUTPUT_FILE=$OUTPUT_DIRECTORY/measurements_`date +%R`.txt
+
+touch $OUTPUT_FILE
+for rep in `seq 1 10`; do
+	echo "Seq = $rep"
+    for i in {200000..700000..25000}; do
+    	echo "i = $i"
+        echo "Size: $i" >> $OUTPUT_FILE;
+        ./src/parallelQuicksort $i >> $OUTPUT_FILE;
+    done ;
+done
+```
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_5.csv"), "10 times Thread Level 5");
+```
+
+Catastrophe: il semblerait que ma VM fasse des caprices -> un reboot s'impose. Néanmoins les prédictions semblent légérement fausses, on teste pour des tailles variant de 400,000 à 1,000,000 par pas de 25,000:
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_5v2.csv"), "10 times Thread Level 5v2");
+```
+
+No comment.
+
+On teste pour des tailles variant de 100,000 à 1,500,000 par pas de 50,000:
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_5v3.csv"), "10 times Thread Level 5v3");
+```
+
+What ?
+
+On teste pour des tailles variant de 100,000 à 1,000,000 par pas de 25,000:
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_5v4.csv"), "10 times Thread Level 5v4");
+```
+
+Les anciennes expériences marchent toujours, il ne s'agit pas ici d'un problème particulier (la VM est de toute façon un problème de base). Il semblerait qu'il faille tendre vers des tailles bien supérieures pour rattraper l'algorithme de la librairie C, avec plus de mesures.
+
+On teste pour des tailles variant de 500,000 à 2,000,000 par pas de 25,000 (on effectue les calculs 20 fois):
+
+```{r, echo=FALSE}
+draw(read.csv("~/Bureau/Git_M2R/M2R-ParallelQuicksort/data/Flo-VirtualBox_2016-02-25/R_5v5.csv"), "10 times Thread Level 5v5");
+```
+
+Il devient difficile de distinguer les algorithmes séquentiel et parallèle. THREAD_LEVEL augmente de le nombre de contextes, mais n'augmente pas le nombre de coeurs physiques, il se peut donc que l'algorithme parrallèle ne rattrape jamais l'algorithme de la librairie C.
